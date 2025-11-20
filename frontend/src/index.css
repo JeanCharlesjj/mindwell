@@ -300,3 +300,32 @@ input:focus {
   font-weight: 700;
   color: var(--primary-color);
 }
+
+.tabs-container {
+  display: flex;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  margin-top: 0; /* Sobrescreve estilo antigo de botão */
+}
+
+.tab:hover {
+  color: var(--primary-color);
+  background-color: #f9fafb;
+}
+
+.tab.active {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}

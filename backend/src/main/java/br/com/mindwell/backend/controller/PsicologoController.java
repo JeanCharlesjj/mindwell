@@ -2,6 +2,7 @@ package br.com.mindwell.backend.controller;
 
 import br.com.mindwell.backend.dto.DadosCadastroPsicologo;
 import br.com.mindwell.backend.dto.DadosLogin;
+import br.com.mindwell.backend.dto.DadosToken;
 import br.com.mindwell.backend.model.Psicologo;
 import br.com.mindwell.backend.repository.PsicologoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class PsicologoController {
     private PsicologoRepository repository;
 
     @PostMapping("/login")
-    public UUID login(@RequestBody DadosLogin dados) {
+    public DadosToken login(@RequestBody DadosLogin dados) {
         Psicologo psicologo = repository.findByEmail(dados.email())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -26,7 +27,7 @@ public class PsicologoController {
             throw new RuntimeException("Senha incorreta");
         }
 
-        return psicologo.getId();
+        return new DadosToken(psicologo.getId(), psicologo.getNome());
     }
     
     @PostMapping
