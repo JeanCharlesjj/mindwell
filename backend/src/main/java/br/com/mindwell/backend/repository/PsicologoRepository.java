@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface PsicologoRepository extends JpaRepository<Psicologo, UUID> {
     
     Optional<Psicologo> findByCodigoDeAssociacao(String codigoDeAssociacao);
+
+    Optional<Psicologo> findByEmail(String email);
 }

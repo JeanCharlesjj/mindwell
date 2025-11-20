@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/consultas")
+@CrossOrigin(origins = "*")
 public class ConsultaController {
 
     @Autowired
