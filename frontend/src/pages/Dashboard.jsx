@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
     const [consultas, setConsultas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const USUARIO_ID = localStorage.getItem('usuario_id'); 
     const USUARIO_TIPO = localStorage.getItem('usuario_tipo');
@@ -36,15 +38,17 @@ function Dashboard() {
     return (
         <div className="app-container">
             <aside className="sidebar">
-                <h2 style={{color: corDestaque}}>MindWell 🧠</h2>
+                <h2 style={{color: corDestaque}}>MindWell</h2>
                 
                 <div className="menu-item active" style={{color: corDestaque, backgroundColor: '#f0fdf4'}}>
-                    📅 {isPsicologo ? 'Agenda' : 'Sessões'}
+                    {isPsicologo ? 'Dashboard' : 'Sessões'}
                 </div>
                 
-                {isPsicologo && <div className="menu-item">👥 Meus Pacientes</div>}
+                {isPsicologo && <div className="menu-item" onClick={() => navigate('/pacientes')}>Meus Pacientes</div>}
                 
-                {!isPsicologo && <div className="menu-item">🔍 Buscar Psicólogo</div>}
+                <div className="menu-item" onClick={() => navigate('/consultas')}>Minhas Consultas</div>
+
+                {!isPsicologo && <div className="menu-item">Buscar Psicólogo</div>}
 
                 <div className="menu-item-logout" onClick={handleLogout}>🚪 Sair</div>
             </aside>

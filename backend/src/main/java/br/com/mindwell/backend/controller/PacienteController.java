@@ -1,6 +1,7 @@
 package br.com.mindwell.backend.controller;
 
 import br.com.mindwell.backend.dto.DadosCadastroPaciente;
+import br.com.mindwell.backend.dto.DadosListagemPaciente;
 import br.com.mindwell.backend.dto.DadosToken;
 import br.com.mindwell.backend.model.Paciente;
 import br.com.mindwell.backend.model.Psicologo;
@@ -9,6 +10,7 @@ import br.com.mindwell.backend.repository.PsicologoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,5 +58,21 @@ public class PacienteController {
 
         // 4. Salvar
         pacienteRepository.save(paciente);
+    }
+
+    @GetMapping
+    public List<DadosListagemPaciente> listar(
+            @RequestParam UUID psicologoId,
+            @RequestParam(required = false) String nome
+    ) {
+        List<Paciente> pacientes;
+
+        if (nome != null && !nome.isBlank()) {
+            pacientes = pacienteRepository.findByPsicologoIdAndNomeContainingIgnoreCase(psicologoId, nome);
+        } else {
+            pacientes = pacienteRepository.findByPsicologoId(psicologoId);
+        }
+
+        return pacientes.stream().map(DadosListagemPaciente::new).toList();
     }
 }

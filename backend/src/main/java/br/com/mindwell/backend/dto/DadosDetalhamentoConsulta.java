@@ -13,7 +13,8 @@ public record DadosDetalhamentoConsulta(
     UUID idPaciente,
     String nomePaciente,
     LocalDateTime dataHora,
-    StatusConsulta status
+    StatusConsulta status,
+    String anotacoes
 ) {
     public DadosDetalhamentoConsulta(Consulta consulta) {
         this(
@@ -23,7 +24,8 @@ public record DadosDetalhamentoConsulta(
             consulta.getPaciente().getId(),
             consulta.getPaciente().getNome(),
             consulta.getDataHora(),
-            consulta.getStatus()
+            consulta.getStatus(),
+            consulta.getAnotacoes()
         );
     }
 }

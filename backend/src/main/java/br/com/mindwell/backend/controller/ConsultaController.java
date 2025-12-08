@@ -58,11 +58,14 @@ public class ConsultaController {
     @GetMapping
     public List<DadosDetalhamentoConsulta> listar(
             @RequestParam(required = false) UUID psicologoId,
-            @RequestParam(required = false) UUID pacienteId
+            @RequestParam(required = false) UUID pacienteId,
+            @RequestParam(required = false) String nomePaciente
     ) {
         List<Consulta> consultas;
 
-        if (psicologoId != null) {
+        if (psicologoId != null && nomePaciente != null) {
+            consultas = consultaRepository.findByPsicologoIdAndPaciente_NomeContainingIgnoreCase(psicologoId, nomePaciente);
+        } else if (psicologoId != null) {
             consultas = consultaRepository.findByPsicologoId(psicologoId);
         } else if (pacienteId != null) {
             consultas = consultaRepository.findByPacienteId(pacienteId);
@@ -70,7 +73,6 @@ public class ConsultaController {
             consultas = consultaRepository.findAll();
         }
 
-        // Transforma a lista de Entidades em lista de DTOs
         return consultas.stream()
                 .map(DadosDetalhamentoConsulta::new)
                 .toList();
