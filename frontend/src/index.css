@@ -317,7 +317,7 @@ input:focus {
   border: none;
   border-bottom: 2px solid transparent;
   transition: all 0.3s ease;
-  margin-top: 0; /* Sobrescreve estilo antigo de botão */
+  margin-top: 0;
 }
 
 .tab:hover {
@@ -328,4 +328,48 @@ input:focus {
 .tab.active {
   color: var(--primary-color);
   border-bottom: 2px solid var(--primary-color);
+}
+
+/* --- ESTILOS DO MODAL (JANELA DE AGENDAMENTO) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
 }
