@@ -1,5 +1,6 @@
 package br.com.mindwell.backend.controller;
 
+import br.com.mindwell.backend.dto.DadosAtualizacaoPsicologo;
 import br.com.mindwell.backend.dto.DadosCadastroPsicologo;
 import br.com.mindwell.backend.dto.DadosLogin;
 import br.com.mindwell.backend.dto.DadosToken;
@@ -27,7 +28,7 @@ public class PsicologoController {
             throw new RuntimeException("Senha incorreta");
         }
 
-        return new DadosToken(psicologo.getId(), psicologo.getNome());
+        return new DadosToken(psicologo.getId(), psicologo.getNome(), "psicologo");
     }
     
     @PostMapping
@@ -43,5 +44,25 @@ public class PsicologoController {
         psicologo.setCodigoDeAssociacao(UUID.randomUUID().toString().substring(0, 8));
 
         repository.save(psicologo);
+    }
+
+    @GetMapping("/{id}")
+    public DadosAtualizacaoPsicologo detalhar(@PathVariable UUID id) {
+        Psicologo psi = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Psicólogo não encontrado"));
+        
+        return new DadosAtualizacaoPsicologo(psi.getId(), psi.getNome(), psi.getEmail(), psi.getTempoSessao());
+    }
+
+    @PutMapping
+    public void atualizar(@RequestBody DadosAtualizacaoPsicologo dados) {
+        Psicologo psi = repository.findById(dados.id())
+                .orElseThrow(() -> new RuntimeException("Psicólogo não encontrado"));
+
+        if (dados.nome() != null) psi.setNome(dados.nome());
+        if (dados.email() != null) psi.setEmail(dados.email());
+        if (dados.tempoSessao() != null) psi.setTempoSessao(dados.tempoSessao());
+
+        repository.save(psi);
     }
 }

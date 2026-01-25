@@ -54,9 +54,12 @@ function Sidebar() {
                     >
                         Minhas Sessões
                     </div>
-                    {/* Futuramente: Buscar Psicólogos */}
                 </>
             )}
+
+            <button onClick={() => navigate('/perfilPsicologo')} className="menu-item">
+                Meu Perfil
+            </button>
 
             <div className="menu-item-logout" onClick={handleLogout}>Sair</div>
         </aside>

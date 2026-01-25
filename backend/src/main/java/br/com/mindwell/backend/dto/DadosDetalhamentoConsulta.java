@@ -14,7 +14,9 @@ public record DadosDetalhamentoConsulta(
     String nomePaciente,
     LocalDateTime dataHora,
     StatusConsulta status,
-    String anotacoes
+    String anotacoes,
+    Integer tempoSessao,
+    LocalDateTime dataInicioReal
 ) {
     public DadosDetalhamentoConsulta(Consulta consulta) {
         this(
@@ -25,7 +27,9 @@ public record DadosDetalhamentoConsulta(
             consulta.getPaciente().getNome(),
             consulta.getDataHora(),
             consulta.getStatus(),
-            consulta.getAnotacoes()
+            consulta.getAnotacoes(),
+            consulta.getPsicologo().getTempoSessao(),
+            consulta.getDataInicioReal()
         );
     }
 }

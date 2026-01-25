@@ -28,4 +28,6 @@ public class Psicologo {
     @Column(unique = true)
     private String codigoDeAssociacao;
 
+    private Integer tempoSessao = 50; 
+
 }

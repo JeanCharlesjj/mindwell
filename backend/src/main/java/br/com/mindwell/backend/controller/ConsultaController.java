@@ -3,6 +3,7 @@ package br.com.mindwell.backend.controller;
 import br.com.mindwell.backend.dto.DadosAgendamentoConsulta;
 import br.com.mindwell.backend.dto.DadosAtualizacaoConsulta;
 import br.com.mindwell.backend.dto.DadosDetalhamentoConsulta;
+import br.com.mindwell.backend.dto.DadosFinalizacaoConsulta;
 import br.com.mindwell.backend.model.Consulta;
 import br.com.mindwell.backend.model.Paciente;
 import br.com.mindwell.backend.model.Psicologo;
@@ -13,6 +14,7 @@ import br.com.mindwell.backend.repository.PsicologoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,6 +93,37 @@ public class ConsultaController {
                 .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
         
         consulta.setStatus(StatusConsulta.CANCELADA);
+        repository.save(consulta);
+    }
+
+    @GetMapping("/{id}")
+    public DadosDetalhamentoConsulta detalhar(@PathVariable UUID id) {
+        Consulta consulta = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+        
+        return new DadosDetalhamentoConsulta(consulta);
+    }
+
+    @PutMapping("/{id}/iniciar")
+    public void iniciarSessao(@PathVariable UUID id) {
+        Consulta consulta = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+        
+        // Só define o início se ainda estiver nulo
+        if (consulta.getDataInicioReal() == null) {
+            consulta.setDataInicioReal(LocalDateTime.now());
+            repository.save(consulta);
+        }
+    }
+
+    @PutMapping("/{id}/finalizar")
+    public void finalizar(@PathVariable UUID id, @RequestBody DadosFinalizacaoConsulta dados) {
+        Consulta consulta = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+        
+        consulta.setAnotacoes(dados.anotacoes());
+        consulta.setStatus(StatusConsulta.REALIZADA);
+        
         repository.save(consulta);
     }
 }

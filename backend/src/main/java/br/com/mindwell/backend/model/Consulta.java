@@ -30,8 +30,8 @@ public class Consulta {
     @Enumerated(EnumType.STRING)
     private StatusConsulta status;
 
-    // Campo para anotações futuras do psicólogo
     @Column(columnDefinition = "TEXT")
     private String anotacoes;
 
+    private LocalDateTime dataInicioReal; 
 }

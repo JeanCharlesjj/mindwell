@@ -2,6 +2,7 @@ package br.com.mindwell.backend.controller;
 
 import br.com.mindwell.backend.dto.DadosCadastroPaciente;
 import br.com.mindwell.backend.dto.DadosListagemPaciente;
+import br.com.mindwell.backend.dto.DadosLogin;
 import br.com.mindwell.backend.dto.DadosToken;
 import br.com.mindwell.backend.model.Paciente;
 import br.com.mindwell.backend.model.Psicologo;
@@ -26,7 +27,7 @@ public class PacienteController {
     private PsicologoRepository psicologoRepository;
 
     @PostMapping("/login")
-    public DadosToken login(@RequestBody br.com.mindwell.backend.dto.DadosLogin dados) {
+    public DadosToken login(@RequestBody DadosLogin dados) {
         Paciente paciente = pacienteRepository.findByEmail(dados.email())
                 .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
 
@@ -34,7 +35,7 @@ public class PacienteController {
             throw new RuntimeException("Senha incorreta");
         }
 
-        return new DadosToken(paciente.getId(), paciente.getNome());
+        return new DadosToken(paciente.getId(), paciente.getNome(), "paciente");
     }
 
     @PostMapping

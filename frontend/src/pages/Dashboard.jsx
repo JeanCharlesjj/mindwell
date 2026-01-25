@@ -29,10 +29,10 @@ function Dashboard() {
 
     const isPsicologo = USUARIO_TIPO === 'psicologo';
     
-    // Contagem apenas de consultas ATIVAS (não canceladas) para o card
-    const agendamentosAtivos = consultas.filter(c => c.status !== 'CANCELADA').length;
+    // Contagem apenas de consultas AGENDADAS para o card
+    const agendamentosAtivos = consultas.filter(c => c.status === 'AGENDADA').length;
     
-    const tituloCard = isPsicologo ? 'Consultas Agendadas' : 'Próxima Sessão';
+    const tituloCard = isPsicologo ? 'Consultas Pendentes' : 'Próximas Sessões';
     const corDestaque = isPsicologo ? "var(--primary-color)" : "#10b981";
 
     return (
@@ -41,7 +41,7 @@ function Dashboard() {
 
             <main className="main-content">
                 <header className="header">
-                    <h2>Olá, {USUARIO_NOME} 👋</h2>
+                    <h2>Olá, {USUARIO_NOME}</h2>
                 </header>
 
                 <section className="cards-grid">
@@ -50,7 +50,7 @@ function Dashboard() {
                         <div className="number" style={{color: corDestaque}}>
                             {agendamentosAtivos}
                         </div>
-                        <small style={{color: '#666'}}>Ativas</small>
+                        <small style={{color: '#666'}}>Agendadas</small>
                     </div>
                 </section>
 
@@ -62,16 +62,36 @@ function Dashboard() {
 
                     {consultas.map(consulta => {
                         const isCancelada = consulta.status === 'CANCELADA';
+                        const isRealizada = consulta.status === 'REALIZADA';
+                        
+                        // Definição de Cores Baseada no Status
+                        let corBorda = corDestaque;
+                        let corFundo = 'white';
+                        let opacidade = 1;
+                        let corStatus = '#3b82f6'; // Azul padrão
+
+                        if (isCancelada) {
+                            corBorda = '#9ca3af'; // Cinza
+                            corFundo = '#f3f4f6';
+                            opacidade = 0.6;
+                            corStatus = '#9ca3af';
+                        } else if (isRealizada) {
+                            corBorda = '#10b981'; // Verde Sucesso
+                            corFundo = '#ecfdf5'; // Verde bem clarinho
+                            corStatus = '#10b981';
+                        } else {
+                            // Agendada
+                            corStatus = '#f59e0b'; // Laranja/Amarelo para pendente
+                        }
                         
                         return (
                             <div 
                                 className="consulta-item" 
                                 key={consulta.id}
                                 style={{
-                                    // Visual Cinza/Opaco se cancelada
-                                    opacity: isCancelada ? 0.6 : 1,
-                                    backgroundColor: isCancelada ? '#f3f4f6' : 'white',
-                                    borderLeftColor: isCancelada ? '#9ca3af' : corDestaque
+                                    opacity: opacidade,
+                                    backgroundColor: corFundo,
+                                    borderLeftColor: corBorda
                                 }}
                             >
                                 <div className="consulta-info">
@@ -82,11 +102,11 @@ function Dashboard() {
                                     <span 
                                         className="status-badge"
                                         style={{
-                                            backgroundColor: isCancelada ? '#9ca3af' : undefined,
-                                            color: isCancelada ? 'white' : undefined
+                                            backgroundColor: corStatus,
+                                            color: 'white'
                                         }}
                                     >
-                                        {consulta.status}
+                                        {isRealizada ? '✓ CONCLUÍDA' : consulta.status}
                                     </span>
                                 </div>
 
@@ -97,12 +117,30 @@ function Dashboard() {
                                     <div 
                                         className="consulta-hour" 
                                         style={{
-                                            color: isCancelada ? '#666' : corDestaque,
+                                            color: isCancelada ? '#666' : corBorda,
                                             fontWeight: isCancelada ? 'normal' : 'bold'
                                         }}
                                     >
                                         {new Date(consulta.dataHora).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}
                                     </div>
+                                    
+                                    {/* BOTÃO SÓ APARECE SE FOR AGENDADA */}
+                                    {!isCancelada && !isRealizada && (
+                                        <button 
+                                            className="btn-primary"
+                                            style={{
+                                                marginTop: '10px',
+                                                fontSize: '0.85rem',
+                                                padding: '0.5rem',
+                                                width: '100%',
+                                                backgroundColor: '#7c3aed',
+                                                borderColor: '#7c3aed'
+                                            }}
+                                            onClick={() => navigate(`/atendimento/${consulta.id}`)}
+                                        >
+                                            Entrar na Sala
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         );
