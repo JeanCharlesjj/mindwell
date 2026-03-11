@@ -51,7 +51,7 @@ public class PsicologoController {
         Psicologo psi = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Psicólogo não encontrado"));
         
-        return new DadosAtualizacaoPsicologo(psi.getId(), psi.getNome(), psi.getEmail(), psi.getTempoSessao());
+        return new DadosAtualizacaoPsicologo(psi.getId(), psi.getNome(), psi.getEmail(), psi.getTempoSessao(), psi.getCodigoDeAssociacao());
     }
 
     @PutMapping

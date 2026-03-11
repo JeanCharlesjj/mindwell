@@ -12,6 +12,7 @@ import br.com.mindwell.backend.repository.ConsultaRepository;
 import br.com.mindwell.backend.repository.PacienteRepository;
 import br.com.mindwell.backend.repository.PsicologoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -125,5 +126,17 @@ public class ConsultaController {
         consulta.setStatus(StatusConsulta.REALIZADA);
         
         repository.save(consulta);
+    }
+
+    @GetMapping("/historico/paciente/{pacienteId}")
+    public ResponseEntity<List<DadosDetalhamentoConsulta>> listarHistoricoDoPaciente(@PathVariable UUID pacienteId) {
+        
+        List<Consulta> historico = repository.findAllByPacienteIdOrderByDataHoraDesc(pacienteId);
+        
+        List<DadosDetalhamentoConsulta> historicoDTO = historico.stream()
+                .map(DadosDetalhamentoConsulta::new)
+                .toList();
+        
+        return ResponseEntity.ok(historicoDTO);
     }
 }

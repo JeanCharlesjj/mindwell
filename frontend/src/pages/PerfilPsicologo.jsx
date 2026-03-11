@@ -6,6 +6,7 @@ function PerfilPsicologo() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [tempoSessao, setTempoSessao] = useState(50);
+    const [codigoAssociacao, setCodigoAssociacao] = useState('');
     const [loading, setLoading] = useState(true);
 
     const ID = localStorage.getItem('usuario_id');
@@ -19,6 +20,7 @@ function PerfilPsicologo() {
                 setNome(res.data.nome);
                 setEmail(res.data.email);
                 setTempoSessao(res.data.tempoSessao || 50);
+                setCodigoAssociacao(res.data.codigoAssociacao);
                 setLoading(false);
             })
             .catch(err => console.error(err));
@@ -61,6 +63,22 @@ function PerfilPsicologo() {
                     <div className="input-group">
                         <label>E-mail</label>
                         <input type="email" value={email} onChange={e => setEmail(e.target.value)} disabled style={{background: '#eee'}} />
+                    </div>
+
+                    <div className="input-group">
+                        <label>Código de Associação (CRP)</label>
+                        <input 
+                            type="text" 
+                            value={codigoAssociacao} 
+                            disabled 
+                            style={{
+                                background: '#eee', 
+                                cursor: 'not-allowed', 
+                                color: '#666',
+                                fontWeight: 'bold'
+                            }} 
+                        />
+                        <small style={{color: '#888'}}>Este dado é de identificação profissional e não pode ser alterado.</small>
                     </div>
 
                     <div className="input-group">

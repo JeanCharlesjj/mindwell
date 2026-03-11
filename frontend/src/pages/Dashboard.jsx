@@ -124,21 +124,35 @@ function Dashboard() {
                                         {new Date(consulta.dataHora).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}
                                     </div>
                                     
-                                    {/* BOTÃO SÓ APARECE SE FOR AGENDADA */}
                                     {!isCancelada && !isRealizada && (
                                         <button 
                                             className="btn-primary"
                                             style={{
-                                                marginTop: '10px',
-                                                fontSize: '0.85rem',
-                                                padding: '0.5rem',
-                                                width: '100%',
-                                                backgroundColor: '#7c3aed',
-                                                borderColor: '#7c3aed'
+                                                marginTop: '10px', fontSize: '0.85rem', padding: '0.5rem', width: '100%',
+                                                backgroundColor: '#7c3aed', borderColor: '#7c3aed'
                                             }}
                                             onClick={() => navigate(`/atendimento/${consulta.id}`)}
                                         >
                                             Entrar na Sala
+                                        </button>
+                                    )}
+
+                                    {isRealizada && isPsicologo && (
+                                        <button 
+                                            className="btn-secondary"
+                                            style={{
+                                                marginTop: '10px', fontSize: '0.85rem', padding: '0.5rem', width: '100%',
+                                                backgroundColor: '#ecfdf5', // Fundo verdinho claro
+                                                color: '#10b981',         // Texto verde escuro
+                                                borderColor: '#10b981',
+                                                border: '1px solid',
+                                                borderRadius: '5px',
+                                                cursor: 'pointer',
+                                                fontWeight: 'bold'
+                                            }}
+                                            onClick={() => navigate(`/prontuario/${consulta.idPaciente}`)}
+                                        >
+                                            Ver Prontuário
                                         </button>
                                     )}
                                 </div>

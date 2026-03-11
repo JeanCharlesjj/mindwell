@@ -6,5 +6,6 @@ public record DadosAtualizacaoPsicologo(
     UUID id,
     String nome,
     String email,
-    Integer tempoSessao
+    Integer tempoSessao,
+    String codigoAssociacao
 ) {}

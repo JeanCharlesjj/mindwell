@@ -15,4 +15,6 @@ public interface ConsultaRepository extends JpaRepository<Consulta, UUID> {
     List<Consulta> findByPacienteId(UUID pacienteId);
 
     List<Consulta> findByPsicologoIdAndPaciente_NomeContainingIgnoreCase(UUID psicologoId, String nomePaciente);
+
+    List<Consulta> findAllByPacienteIdOrderByDataHoraDesc(UUID pacienteId);
 }

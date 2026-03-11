@@ -6,6 +6,7 @@ import BuscaPacientes from "./pages/BuscaPacientes";
 import BuscaConsultas from "./pages/BuscaConsultas";
 import SalaAtendimento from './pages/SalaAtendimento';
 import PerfilPsicologo from './pages/PerfilPsicologo';
+import FichaPaciente from './pages/FichaPaciente';
 
 function App() {
   const [usuarioLogado, setUsuarioLogado] = useState(false);
@@ -27,6 +28,8 @@ function App() {
       <Route path="/atendimento/:id" element={<SalaAtendimento />} />
 
       <Route path="/perfilPsicologo" element={<PerfilPsicologo />} />
+
+      <Route path="/prontuario/:id" element={<FichaPaciente />} />
     </Routes>
   );
 }

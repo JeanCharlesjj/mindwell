@@ -122,7 +122,7 @@ function BuscaPacientes() {
                     {!loading && pacientes.length === 0 && <p>Nenhum paciente encontrado.</p>}
 
                     {pacientes.map(paciente => (
-                        <div className="consulta-item" key={paciente.id}>
+                        <div className="consulta-item" style={{ flexWrap: 'wrap' }} key={paciente.id}>
                             <div className="consulta-info">
                                 <strong>{paciente.nome}</strong>
                                 <span style={{fontSize: '0.9rem', color: '#666'}}>{paciente.email}</span>
@@ -136,6 +136,20 @@ function BuscaPacientes() {
                                     onClick={() => abrirModalAgendamento(paciente)}
                                 >
                                     Agendar
+                                </button>
+                                <button 
+                                    className="btn-secondary" 
+                                    style={{
+                                        padding: '0.5rem 1rem', 
+                                        fontSize: '0.85rem', 
+                                        margin: 0,
+                                        backgroundColor: '#f1f5f9',
+                                        color: '#3b82f6',
+                                        border: '1px solid #cbd5e1',
+                                    }}
+                                    onClick={() => navigate(`/prontuario/${paciente.id}`)}
+                                >
+                                    Prontuário
                                 </button>
                             </div>
                         </div>
