@@ -34,4 +34,7 @@ public class Consulta {
     private String anotacoes;
 
     private LocalDateTime dataInicioReal; 
+
+    @Column(name = "motivo_cancelamento", length = 500)
+    private String motivoCancelamento;
 }

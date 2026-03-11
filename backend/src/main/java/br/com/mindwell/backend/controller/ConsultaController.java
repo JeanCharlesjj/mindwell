@@ -2,6 +2,7 @@ package br.com.mindwell.backend.controller;
 
 import br.com.mindwell.backend.dto.DadosAgendamentoConsulta;
 import br.com.mindwell.backend.dto.DadosAtualizacaoConsulta;
+import br.com.mindwell.backend.dto.DadosCancelamentoConsulta;
 import br.com.mindwell.backend.dto.DadosDetalhamentoConsulta;
 import br.com.mindwell.backend.dto.DadosFinalizacaoConsulta;
 import br.com.mindwell.backend.model.Consulta;
@@ -11,6 +12,9 @@ import br.com.mindwell.backend.model.StatusConsulta;
 import br.com.mindwell.backend.repository.ConsultaRepository;
 import br.com.mindwell.backend.repository.PacienteRepository;
 import br.com.mindwell.backend.repository.PsicologoRepository;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,13 +74,11 @@ public class ConsultaController {
         return consultas.stream().map(DadosDetalhamentoConsulta::new).toList();
     }
 
-    // --- AQUI ESTAVA O PROBLEMA (FALTAVA ESSE MÉTODO OU ESTAVA ERRADO) ---
     @PutMapping
     public void atualizar(@RequestBody DadosAtualizacaoConsulta dados) {
         Consulta consulta = repository.findById(dados.id())
                 .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
 
-        // Atualiza apenas se o dado foi enviado
         if (dados.dataHora() != null) {
             consulta.setDataHora(dados.dataHora());
         }
@@ -84,16 +86,6 @@ public class ConsultaController {
             consulta.setAnotacoes(dados.anotacoes());
         }
 
-        repository.save(consulta);
-    }
-
-    // Método para Cancelar
-    @PutMapping("/{id}/cancelar")
-    public void cancelar(@PathVariable UUID id) {
-        Consulta consulta = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
-        
-        consulta.setStatus(StatusConsulta.CANCELADA);
         repository.save(consulta);
     }
 
@@ -110,7 +102,6 @@ public class ConsultaController {
         Consulta consulta = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
         
-        // Só define o início se ainda estiver nulo
         if (consulta.getDataInicioReal() == null) {
             consulta.setDataInicioReal(LocalDateTime.now());
             repository.save(consulta);
@@ -138,5 +129,24 @@ public class ConsultaController {
                 .toList();
         
         return ResponseEntity.ok(historicoDTO);
+    }
+
+    @PutMapping("/{id}/cancelar")
+    @Transactional
+    public ResponseEntity<Void> cancelarConsulta(
+            @PathVariable UUID id, 
+            @RequestBody @Valid DadosCancelamentoConsulta dados) {
+        
+        Consulta consulta = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+        
+        if (consulta.getStatus() != StatusConsulta.AGENDADA) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        consulta.setStatus(StatusConsulta.CANCELADA);
+        consulta.setMotivoCancelamento(dados.motivo());
+        
+        return ResponseEntity.noContent().build();
     }
 }
